@@ -1,0 +1,29 @@
+// import User from '../../../models/User';
+
+import User from "../../../models/User";
+import JWT from "jsonwebtoken";
+import bcrypt from 'bcryptjs';
+// import mongoose from "mongoose";
+import db from "../../../lib/db";
+const JSON_SECRET = process.env.JSON_SECRET;
+export default async function handler(req,res){
+    
+    console.log(req.headers)
+    if(req.method === 'POST'){
+        try{
+            await db.connect();
+            const email = req.body.email;
+            let password = req.body.password;
+            password = bcrypt.hashSync(password);
+            const user = await User.create({email,password});
+            const token = JWT.sign({user},JSON_SECRET,{expiresIn:'2000'});
+            res.status(201).send({token,user})
+            await db.disconnect();
+        } catch(err) {
+            console.error(err)
+            res.status(401).send(err.message)
+        }
+    } else{
+        res.status(401).send('Page not found');
+    }
+}
