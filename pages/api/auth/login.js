@@ -21,7 +21,7 @@ export default async function handler(req, res) {
             
             if (user && compare) {
               const token = JWT.sign({ user }, JWT_SECRET, {
-                expiresIn: "60000",
+                expiresIn: "1d",
               });
               res.status(201).send({ token });
             } else {
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
             }
         }
     } catch (err) {
-        res.status(401).send({message: err.message});
+        res.status(401).send({message: err});
     }
     
   } else {
