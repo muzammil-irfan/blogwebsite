@@ -13,7 +13,6 @@ import {
 import axios from 'axios'
 import { useFormik } from "formik";
 import Loader from '../components/Loader';
-import bcrypt from 'bcryptjs/dist/bcrypt';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
@@ -31,19 +30,18 @@ export default function Login() {
     }
   });
   const handleSubmit = (values)=>{
-    const password = bcrypt.hashSync(values.password);
     axios.post('/api/auth/login',{
       email:values.email,
-      password: values.password
+      password:values.password
     })
     .then((response)=>{
       setloading(100);
       console.log(response);
-      toast([{
+      toast({
         title:'Login Successfuly',
         status:'success',
         duration:3000
-      }])
+      })
       Cookies.set('userToken',response.data.token);
       router.push('/admin')
       
@@ -51,11 +49,11 @@ export default function Login() {
     .catch((error)=>{
       setloading(100);
       console.log(error)
-      toast([{
+      toast({
         title:error.message,
         status:'error',
         duration:3000
-      }])
+      })
     })
 
   }

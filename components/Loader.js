@@ -3,7 +3,7 @@ import React from 'react'
 import LoadingBar from 'react-top-loading-bar'
 // import { BarLoader } from 'react-spinners'
 
-export default function Loader(props) {
+export default function Loader(props    ) {
   return (
     <>
     {/* <BarLoader /> */}

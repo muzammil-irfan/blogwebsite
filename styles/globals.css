@@ -14,3 +14,16 @@ a {
 * {
   box-sizing: border-box;
 }
+.ql-toolbar{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.ql-formats{
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.ql-container{
+  max-height: 70vh;
+  overflow-y: scroll;
+}

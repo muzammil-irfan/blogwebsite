@@ -16,7 +16,7 @@ const handler = async(req,res)=>{
                 }
             }));
             const id = decode.user._id;
-            db.connect();
+            await db.connect();
             const user = await User.findById(id);
             db.disconnect();
             res.status(201).send({user});

@@ -3,14 +3,13 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
+import AdminDashboard from '../../components/admin';
 
 export default function Admin() {
+  const [admin, setadmin] = useState(true)
   const router = useRouter();
-  const [admin, setadmin] = useState(false)
-  const toast = useToast();
   useEffect(() => {
     const token = Cookies.get('userToken');
-    // console.log(token)
     if(token === undefined) {
       setadmin(false);
       router.push('/login');
@@ -25,16 +24,16 @@ export default function Admin() {
       })
       .catch((err)=>{
         console.log(err);
-
+        router.push('/login');
       })
     }
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); 
   
   return (
     <>
     {
-      admin && <div>Admin</div>
+      admin && <AdminDashboard />
     }
     </>
   )

@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     try{
 
         let { email, password } = req.body;
-  
+        
         await db.connect();
   
         const user = await User.findOne({ email });
