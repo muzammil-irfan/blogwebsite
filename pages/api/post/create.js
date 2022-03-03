@@ -11,18 +11,16 @@ const handler = async(req,res)=>{
             if(slugCheck === null ) {
                 const post = await Post.create(req.body);
                 db.disconnect();
-                res.status(201).send(post);
-                return;
+                return res.status(201).json(post);
             } else {
                 db.disconnect();
-                res.status(200).send({error:'Slug is already used'});
-                return;
+                return res.status(200).json({error:'Slug is already used'});
             }
         } else {
             res.status(400).send('Page not found');
         }
     } catch (error) {
-        res.status(402).send({error})
+        res.status(402).json({error})
     }
 }
 

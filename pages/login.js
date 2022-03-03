@@ -36,7 +36,6 @@ export default function Login() {
     })
     .then((response)=>{
       setloading(100);
-      console.log(response);
       toast({
         title:'Login Successfuly',
         status:'success',

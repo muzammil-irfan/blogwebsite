@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import { Flex,Stack,Button, Heading } from '@chakra-ui/react' 
 import { useRouter } from 'next/router'
 import AdminSidebar from './AdminSidebar'
-import AllPost from './AllPost';
+import AllPost from './allPost';
 import dynamic from 'next/dynamic';
 export default function AdminDashboard() {
   const NewPost = dynamic(import('./NewPost'),{

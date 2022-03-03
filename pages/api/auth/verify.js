@@ -18,6 +18,7 @@ const handler = async(req,res)=>{
             const id = decode.user._id;
             await db.connect();
             const user = await User.findById(id);
+            if(!user){return res.status(401).send('Unauthorized')}
             db.disconnect();
             res.status(201).send({user});
         } catch (err) {

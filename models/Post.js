@@ -29,7 +29,8 @@ const PostSchema = new mongoose.Schema({
     draft:{
         type:Boolean,
         required:true,
-    }
+    },
+    
 },{
     timestamps:true
 });
