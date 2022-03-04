@@ -104,6 +104,11 @@ const AllPost = () => {
           Create Post
         </Button>
         </HStack>
+        {
+          data.length === 0 ? 
+          <Text my={8} textAlign={'center'}>
+               There is not any post available 
+          </Text> :
         <SimpleGrid spacing={4} columns={{lg:2}} >
           {data.map((item) => {
             return (
@@ -140,6 +145,7 @@ const AllPost = () => {
             );
           })}
         </SimpleGrid>
+        }
       </Flex>
         </>
       }

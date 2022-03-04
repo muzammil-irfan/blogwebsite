@@ -50,8 +50,8 @@ export default function PostForm(props) {
           </FormControl>
           <FormControl isRequired my={6}>
             <FormLabel>CoverImage:</FormLabel>
-            <HStack spacing={2}>
-              <InputGroup w="50%">
+            <Stack direction={{base:'column',lg:'row'}}>
+              <InputGroup p={2} >
                 <InputLeftAddon>URL</InputLeftAddon>
                 <Input
                   type="text"
@@ -61,7 +61,7 @@ export default function PostForm(props) {
                   placeholder="https://example.com/imageaddress"
                 />
               </InputGroup>
-              <InputGroup w="50%">
+              <InputGroup p={2} >
                 <InputLeftAddon>Alt</InputLeftAddon>
                 <Input
                   type="text"
@@ -71,15 +71,10 @@ export default function PostForm(props) {
                   placeholder="Image Alt Text"
                 />
               </InputGroup>
-            </HStack>
+            </Stack>
           </FormControl>
           <FormControl isRequired my={6}>
             <FormLabel>Content:</FormLabel>
-            {/* <RichTextEditor
-            name="content"
-            onChange={(e)=> contentData = e}
-            defaultValue={props.values.content}
-          /> */}
             <Box bgColor="white" p={2} border="1px">
               <Editor
                 placeholder="Type Your content here..."
