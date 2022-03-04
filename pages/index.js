@@ -13,7 +13,7 @@ export default function Home() {
         <Heading>
           Blog UI Coming Soon
         </Heading>
-        <Link href="/admin" >
+        <Link href="/admin/publish" >
         <a>
           <Heading borderBottom={'3px solid black'}>
         Admin Page(Click Here)

@@ -1,5 +1,5 @@
 import React,{ useState} from 'react'
-import {Modal,ModalOverlay,ModalContent,ModalBody,ModalCloseButton,ModalFooter,ModalHeader,Button, Heading, Input,useDisclosure,Text, useToast} from '@chakra-ui/react';
+import {Modal,ModalOverlay,ModalContent,ModalBody,ModalCloseButton,ModalFooter,ModalHeader,Button, Heading, Input,Text} from '@chakra-ui/react';
 
 export default function DeletePost(props) {
     const [value, setvalue] = useState('');

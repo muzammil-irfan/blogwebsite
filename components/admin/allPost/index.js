@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Loader from "../../Loader";
 import axios from "axios";
 import {
-  Stack,
   HStack,
   Heading,
   Text,
@@ -10,76 +9,103 @@ import {
   Flex,
   Button,
   useDisclosure,
+  SimpleGrid,
   useToast
 } from "@chakra-ui/react";
-import { FiEdit, FiDelete } from "react-icons/fi";
+import { FiEdit, FiFilePlus } from "react-icons/fi";
 import DeletePost from "./DeletePost";
-import Cookies from 'js-cookie';
+import { errorToast, successToast } from "../../../lib/toast";
+import { useRouter } from 'next/router';
+import { AiOutlineDelete } from 'react-icons/ai'
+import FullScreenLoader from "../../common/FullScreenLoader";
 
 const AllPost = () => {
+  const router = useRouter();
     const toast = useToast();
     const { isOpen,onOpen,onClose } = useDisclosure()
   const [data, setdata] = useState([]);
-  const [loading, setloading] = useState(null);
+  const [loading, setloading] = useState(false);
   const [postId, setpostId] = useState(null);
-
+  const pathname = router.asPath.includes('/publish');
 
   useEffect(() => {
-    setloading(0);
+    setloading(true);
     axios
       .get("/api/post")
       .then((res) => {
-        setloading(100);
-        setdata(res.data);
+        setloading(false);
+        //If true then publish otherwise draft
+        if(pathname){
+          const publishPost = res.data.filter(item=> !item.draft)
+          if(publishPost.length > 0){
+            setdata(publishPost);
+          }
+        }else {
+          const draftPost = res.data.filter(item=>item.draft);
+          if(draftPost.length > 0){
+            setdata(draftPost)
+          }
+        }
         
       })
       .catch((err) => {
-        setloading(100);
+        setloading(false);
         console.log(err);
       });
+      // eslint-disable-next-line
   }, []);
   const handleClick = (type,id) =>{
       if(type === 'edit'){
-          
+          router.push(`/admin/edit/${id}`)
     } else {
         onOpen();
         setpostId(id);
     }
   }
   const handleConfirmClick = ()=>{
-    const token = Cookies.get('userToken');
-        axios.post('/api/post/delete',{id:postId,token})
+      setloading(0);
+        axios.delete(`/api/post/${postId}`)
         .then(res=>{
-            console.log(res)
-            onClose()
-            toast({
-                title:res.data,
-                status:'success',
-                duration: 3000
-            })
+          setloading(100);  
+          onClose();
+            
+            successToast('Deleted Successfuly',toast);
             const newPost = data.filter(post=>post._id !== postId);
             setdata(newPost);
+
         })
         .catch(err=>{
+            setloading(100);
             console.log(err)
             onClose()
-            toast({
-                title:err.message,
-                status:'error',
-                duration:3000
-            })
+            errorToast(err.message,toast);
         })
   }
   return (
     <>
+      {
+        typeof loading !== Boolean &&
       <Loader progress={loading} />
+      }
+      {
+        loading === true ?
+        <FullScreenLoader /> :
+        <>
+        
       <DeletePost isOpen={isOpen} onClick={handleConfirmClick} onClose={onClose} />
-      <Flex p={2} direction='column' >
-        <Heading textAlign={'center'} mb={2}>
-          All Posts
+      <Flex p={2} direction='column' w='full'>
+        <HStack justify={'space-between'} mb={6}>
+        <Heading size='lg'>
+        {/* If true then publish otherwise draft */}
+          {pathname ? 'Publish Post' : "Draft Post"}
         </Heading>
-        <Stack spacing={4} w="full">
-          {data.map((item,index) => {
+        <Button variant={'outline'} size='sm' colorScheme={'blue'} gap={1} onClick={()=>router.push('/admin/createpost')}>
+          <FiFilePlus />
+          Create Post
+        </Button>
+        </HStack>
+        <SimpleGrid spacing={4} columns={{lg:2}} >
+          {data.map((item) => {
             return (
               <>
                 <Box
@@ -88,7 +114,7 @@ const AllPost = () => {
                   border="1px solid gray"
                   borderRadius={10}
                   p={2}
-                  key={index}
+                  key={item.slug}
                 >
                   <Text mb={2} fontWeight='semibold' fontSize={{ base: "xs", md: "md" }}>
                      
@@ -99,12 +125,12 @@ const AllPost = () => {
                       {item.createdAt.slice(0, 10)}
                     </Text>
                     <HStack>
-                      <Button size="xs" gap={1} colorScheme={"green"} onClick={()=>handleClick('edit',item._id)}>
+                      <Button variant='outline'size="xs" gap={1} colorScheme={"green"} onClick={()=>handleClick('edit',item._id)}>
                         <FiEdit />
                         Edit
                       </Button>
-                      <Button size="xs" gap={1} colorScheme={"red"} onClick={()=>handleClick('delete',item._id)}>
-                        <FiDelete />  
+                      <Button variant='outline'size="xs" gap={1} colorScheme={"red"} onClick={()=>handleClick('delete',item._id)}>
+                        <AiOutlineDelete />  
                         Delete
                       </Button>
                     </HStack>
@@ -113,8 +139,10 @@ const AllPost = () => {
               </>
             );
           })}
-        </Stack>
+        </SimpleGrid>
       </Flex>
+        </>
+      }
     </>
   );
 };

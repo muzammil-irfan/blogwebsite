@@ -42,7 +42,7 @@ export default function Login() {
         duration:3000
       })
       Cookies.set('userToken',response.data.token);
-      router.push('/admin')
+      router.push('/admin/publish')
       
     })
     .catch((error)=>{
